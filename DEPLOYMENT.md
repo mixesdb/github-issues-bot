@@ -4,9 +4,40 @@ This guide covers multiple deployment options for running your Discord bot perma
 
 ## Prerequisites
 
-- Node.js 18+ installed on your server
+- Node.js 18+ installed on your server (we'll help you set this up with NVM)
 - Your Discord bot token and GitHub credentials configured in `.env` file
 - Server with root/sudo access
+
+## NVM Setup (If Node.js is not in PATH)
+
+If your GitHub user doesn't have Node.js in their PATH, we'll use NVM (Node Version Manager) to manage Node.js versions.
+
+### Quick NVM Setup
+
+```bash
+# Run the NVM setup script
+chmod +x setup-nvm.sh
+./setup-nvm.sh
+```
+
+### Manual NVM Setup
+
+```bash
+# Install NVM
+curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.0/install.sh | bash
+
+# Reload your shell profile
+source ~/.bashrc  # or ~/.zshrc
+
+# Install Node.js 18 LTS
+nvm install 18
+nvm use 18
+nvm alias default 18
+
+# Verify installation
+node --version
+npm --version
+```
 
 ## Environment Variables
 
@@ -40,6 +71,10 @@ chmod +x deploy.sh
 
 #### Manual PM2 Setup
 ```bash
+# Load NVM (if using NVM)
+source ~/.nvm/nvm.sh
+nvm use 18
+
 # Install PM2 globally
 npm install -g pm2
 

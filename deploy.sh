@@ -34,6 +34,25 @@ fi
 deploy_pm2() {
     print_status "Deploying with PM2..."
     
+    # Load NVM if available
+    if [ -s "$HOME/.nvm/nvm.sh" ]; then
+        print_status "Loading NVM..."
+        source "$HOME/.nvm/nvm.sh"
+    elif [ -s "/usr/local/nvm/nvm.sh" ]; then
+        print_status "Loading NVM from /usr/local/nvm..."
+        source "/usr/local/nvm/nvm.sh"
+    fi
+    
+    # Check if Node.js is available
+    if ! command -v node &> /dev/null; then
+        print_error "Node.js not found! Please install Node.js using NVM:"
+        echo "  curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.0/install.sh | bash"
+        echo "  source ~/.bashrc"
+        echo "  nvm install 18"
+        echo "  nvm use 18"
+        exit 1
+    fi
+    
     # Install PM2 globally if not installed
     if ! command -v pm2 &> /dev/null; then
         print_status "Installing PM2 globally..."

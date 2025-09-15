@@ -6,13 +6,14 @@ After=network.target
 Type=simple
 User=github-bot
 WorkingDirectory=/opt/github-issues-bot
-ExecStart=/usr/bin/node dist/index.js
+ExecStart=/bin/bash -c 'source /home/github-bot/.nvm/nvm.sh && nvm use 18 && node dist/index.js'
 Restart=always
 RestartSec=10
 StandardOutput=syslog
 StandardError=syslog
 SyslogIdentifier=github-issues-bot
 Environment=NODE_ENV=production
+Environment=NVM_DIR=/home/github-bot/.nvm
 
 # Security settings
 NoNewPrivileges=true

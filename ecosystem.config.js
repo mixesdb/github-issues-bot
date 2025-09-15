@@ -3,6 +3,7 @@ module.exports = {
     {
       name: 'github-issues-bot',
       script: 'dist/index.js',
+      interpreter: process.env.NVM_BIN || 'node',
       instances: 1,
       autorestart: true,
       watch: false,
