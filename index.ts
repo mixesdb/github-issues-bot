@@ -19,11 +19,12 @@ app.listen(PORT, () => {
 });
 
 const client = new DiscordJS.Client({
-    intents: ["Guilds", "GuildMessages"],
+    intents: [DiscordJS.GatewayIntentBits.Guilds, DiscordJS.GatewayIntentBits.GuildMessages],
 });
 
-client.on("ready", () => {
+client.on("clientReady", () => {
     console.log("issue bot ready");
+    debugger; // This will pause execution when debugging
     const guildId = process.env.GUILD_ID || "";
 
     const guild = client.guilds.cache.get(guildId);
@@ -38,7 +39,7 @@ client.on("ready", () => {
 
     commands?.create({
         name: "Open github issue",
-        type: 3,
+        type: DiscordJS.ApplicationCommandType.Message,
     });
 });
 
@@ -46,7 +47,25 @@ client.on("interactionCreate", async (interaction) => {
     if (interaction.isMessageContextMenuCommand()) {
         const { commandName, targetMessage } = interaction;
         if (commandName === "Open github issue") {
-            const modal = getModal(targetMessage.content);
+            // Extract thread/forum post title if the message is from a thread
+            let messageContent = targetMessage.content;
+            
+            // Fetch the channel using channelId since targetMessage.channel might be null
+            const channel = await client.channels.fetch(targetMessage.channelId);
+            let threadTitle = "";
+
+            if (channel?.isThread()) {
+                const thread = channel;
+                threadTitle = thread.name;
+            }
+            
+            // Create message link
+            const messageLink = `https://discord.com/channels/${interaction.guildId}/${targetMessage.channelId}/${targetMessage.id}`;
+            
+            // Add message link to the description
+            const descriptionWithLink = `[View original message](${messageLink})\n\n${messageContent}`;
+            
+            const modal = getModal(threadTitle, descriptionWithLink);
             interaction.showModal(modal);
         }
     } else if (interaction.isModalSubmit()) {

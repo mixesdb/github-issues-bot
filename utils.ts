@@ -5,7 +5,7 @@ import {
     TextInputStyle,
 } from "discord.js";
 
-export const getModal = (description: string) => {
+export const getModal = (threadTitle: string, description: string) => {
     const modal = new ModalBuilder()
         .setTitle("Create github issue")
         .setCustomId("AwesomeForm");
@@ -13,7 +13,8 @@ export const getModal = (description: string) => {
     const issueTitle = new TextInputBuilder()
         .setStyle(TextInputStyle.Short)
         .setCustomId("issueTitle")
-        .setLabel("Issue title");
+        .setLabel("Issue title")
+        .setValue(threadTitle);
 
     const issueDescription = new TextInputBuilder()
         .setStyle(TextInputStyle.Paragraph)
