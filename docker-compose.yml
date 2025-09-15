@@ -1,0 +1,30 @@
+version: '3.8'
+
+services:
+  github-issues-bot:
+    build: .
+    container_name: github-issues-bot
+    restart: unless-stopped
+    environment:
+      - NODE_ENV=production
+    env_file:
+      - .env
+    volumes:
+      - ./logs:/app/logs
+    # Uncomment if you need to expose ports
+    # ports:
+    #   - "3000:3000"
+    # Health check
+    healthcheck:
+      test: ["CMD", "node", "-e", "console.log('Health check passed')"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
+    # Resource limits
+    deploy:
+      resources:
+        limits:
+          memory: 1G
+        reservations:
+          memory: 512M

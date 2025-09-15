@@ -1,0 +1,29 @@
+[Unit]
+Description=GitHub Issues Bot
+After=network.target
+
+[Service]
+Type=simple
+User=github-bot
+WorkingDirectory=/opt/github-issues-bot
+ExecStart=/usr/bin/node dist/index.js
+Restart=always
+RestartSec=10
+StandardOutput=syslog
+StandardError=syslog
+SyslogIdentifier=github-issues-bot
+Environment=NODE_ENV=production
+
+# Security settings
+NoNewPrivileges=true
+PrivateTmp=true
+ProtectSystem=strict
+ProtectHome=true
+ReadWritePaths=/opt/github-issues-bot/logs
+
+# Resource limits
+LimitNOFILE=65536
+MemoryMax=1G
+
+[Install]
+WantedBy=multi-user.target
