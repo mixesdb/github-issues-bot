@@ -6,6 +6,8 @@ After=network.target
 Type=simple
 User=github-bot
 WorkingDirectory=/opt/github-issues-bot
+ExecStartPre=/bin/mkdir -p /opt/github-issues-bot/logs
+ExecStartPre=/bin/chown github-bot:github-bot /opt/github-issues-bot/logs
 ExecStart=/bin/bash -c 'source /home/github-bot/.nvm/nvm.sh && nvm use 18 && node dist/index.js'
 Restart=always
 RestartSec=10
@@ -19,7 +21,7 @@ Environment=NVM_DIR=/home/github-bot/.nvm
 NoNewPrivileges=true
 PrivateTmp=true
 ProtectSystem=strict
-ProtectHome=true
+ProtectHome=read-only
 ReadWritePaths=/opt/github-issues-bot/logs
 
 # Resource limits

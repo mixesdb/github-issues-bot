@@ -1,0 +1,2 @@
+# This file ensures the logs directory is tracked by Git
+# The logs directory is used by PM2 for storing application logs
